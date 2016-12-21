@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    package="com.example.louise.test">
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- 完全退出程式所添加的权限 -->
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+    <!-- 在 AndroidManifest.xml 加入存取外部儲存空間的權限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:gravity="center_horizontal"
+        android:icon="@drawable/dgame"
+        android:label="@string/title_activity_main"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- <activity -->
+        <!-- android:name=".IndexActivity" -->
+        <!-- android:label="@string/title_activity_index"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+
+        <activity android:name=".FirstpageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".IndexActivity"
+            android:label="@string/title_activity_main"
+            android:parentActivityName=".FirstpageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FirstpageActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="開始遊戲"
+            android:parentActivityName=".IndexActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".IndexActivity" />
+        </activity>
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".PlacelistActivity"
+            android:label="@string/title_activity_placelist">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <activity
+            android:name=".PlaceActivity"
+            android:label="@string/title_activity_place">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <activity
+            android:name=".PlaceSecActivity"
+            android:label="@string/title_activity_place">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <activity
+            android:name=".ProfileUpdateActivity"
+            android:label="@string/title_activity_profile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".ManualActivity"
+            android:label="@string/title_activity_manual">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".KeeperinfoActivity"
+            android:label="@string/title_activity_keeperinfor">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".AwardActivity"
+            android:label="@string/title_activity_award">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".Tab1" />
+        <activity android:name=".Tab2" />
+        <activity android:name=".Tab3" />
+        <activity android:name=".Tab4" />
+        <activity
+            android:name=".StoryActivity"
+            android:label="選擇陣營">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".IndexActivity" />
+        </activity>
+        <activity
+            android:name=".BartestActivity"
+            android:label="測試">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FirstpageActivity" />
+        </activity>
+        <activity
+            android:name=".CoinActivity"
+            android:label="獲得金幣"
+            android:parentActivityName=".CoinListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CoinListActivity" />
+        </activity>
+        <activity
+            android:name=".PrisonActivity"
+            android:label="水牢列表"
+            android:parentActivityName=".Id10PrisionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Id10PrisionActivity" />
+        </activity>
+        <activity
+            android:name=".Id10PrisionActivity"
+            android:label="顯示地點"
+            android:parentActivityName=".PlacelistActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PlacelistActivity" />
+        </activity>
+        <activity
+            android:name=".NCCUContactActivity"
+            android:label="站內通訊"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="遊戲設定"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".StoryOnlyActivity"
+            android:label="故事背景"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".CoinListActivity"
+            android:label="@string/title_activity_coin_list"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".PuzzleActivity"
+            android:label="Puzzle Collection"
+            android:parentActivityName=".MapsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapsActivity" />
+        </activity>
+        <activity android:name=".CommunicationActivity" />
+        <activity
+            android:name=".ExplainAvtivity"
+            android:label="遊戲說明"
+            android:parentActivityName=".SettingActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingActivity" />
+        </activity>
+    </application>
+
+</manifest>

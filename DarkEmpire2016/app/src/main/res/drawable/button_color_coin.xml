@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@android:id/background">
+        <shape android:shape="oval">
+            <!-- radius background of progressbar -->
+
+
+            <gradient
+                android:startColor="#f2b021"
+                android:centerColor="#f2b021"
+                android:centerY="0.75"
+                android:endColor="#f2e7ce"
+                android:angle="270"
+                />
+            <padding
+                android:left="20dp"
+                android:right="20dp" />
+            <stroke android:width="8px" android:color="#f2b021" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">GamePlay</string>
+    <string name="title_activity_main">Dark Empire</string>
+    <string name="title_activity_index">Game</string>
+    <string name="title_activity_maps">政大地圖</string>
+    <string name="title_activity_placelist">地點清單</string>
+    <string name="title_activity_place">顯示地點</string>
+    <string name="title_activity_profile">個人資料</string>
+    <string name="title_activity_manual">徽章成就</string>
+    <string name="title_activity_award">測試</string>
+    <string name="title_activity_keeperinfor">敵人戰績</string>
+    <string name="title_activity_firstpage">遊戲登入頁</string>
+    <string name="title_activity_story">故事大綱</string>
+    <string name="title_activity_coin_list">金幣清單</string>
+
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.louise.test.MainActivity">
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_main"
+        android:text="開始遊戲"
+        android:textSize="20dp"
+        android:id="@+id/playgame" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_personal"
+        android:text="個人資料"
+        android:textSize="20dp"
+        android:id="@+id/profile"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/playgame"
+        android:layout_alignStart="@+id/playgame" />
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Hello!"-->
+        <!--android:id="@+id/keeper"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_badge"
+        android:text="徽章成就"
+        android:textSize="20dp"
+        android:id="@+id/manual"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/profile"
+        android:layout_alignStart="@+id/profile" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_comm"
+        android:text="站內通訊"
+        android:textSize="20dp"
+        android:id="@+id/nccucontact"
+        android:layout_alignTop="@+id/manual"
+        android:layout_alignLeft="@+id/setting"
+        android:layout_alignStart="@+id/setting" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_coin"
+        android:text="獲得金幣"
+        android:textSize="20dp"
+        android:id="@+id/getcoin"
+        android:layout_alignTop="@+id/playgame"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_custom_story"
+        android:text="故事背景"
+        android:textSize="20dp"
+        android:id="@+id/setting"
+        android:layout_alignTop="@+id/profile"
+        android:layout_alignLeft="@+id/getcoin"
+        android:layout_alignStart="@+id/getcoin" />
+
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/setting_icon"
+        android:background="@drawable/setting_story"
+        android:layout_alignBottom="@+id/nccucontact"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

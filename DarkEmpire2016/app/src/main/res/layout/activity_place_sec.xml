@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.louise.test.PlaceActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="locationname"
+        android:id="@+id/locationname"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="patrol"
+        android:background="@drawable/button_custom"
+        android:id="@+id/patrol"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/patrolvalue"
+        android:layout_toStartOf="@+id/patrolvalue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="belong"
+        android:id="@+id/belong"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/placeimg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="lordname"
+        android:id="@+id/lordname"
+        android:layout_below="@+id/belong"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="blood"
+        android:id="@+id/blood"
+        android:layout_below="@+id/lordname"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="patrolvalue"
+        android:id="@+id/patrolvalue"
+        android:layout_above="@+id/patrol"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fight"
+        android:background="@drawable/button_custom"
+        android:id="@+id/fight"
+        android:layout_alignTop="@+id/patrol"
+        android:layout_toRightOf="@+id/patrolvalue"
+        android:layout_toEndOf="@+id/patrolvalue" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
+        android:maxWidth="200dp"
+        android:id="@+id/placeimg"
+        android:background="@drawable/image_border"
+        android:layout_below="@+id/locationname"
+        android:layout_marginTop="25dp" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="false"
+        android:progress="100"
+        android:maxWidth="300dip"
+        android:minWidth="300dip"
+        android:progressDrawable="@drawable/black_progressbar"
+        android:layout_below="@+id/blood"
+        android:layout_toLeftOf="@+id/locationname"
+        android:layout_toStartOf="@+id/locationname" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weapon"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        android:layout_alignTop="@+id/belong"
+        android:layout_toRightOf="@+id/patrolvalue"
+        android:layout_toEndOf="@+id/patrolvalue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=">本日隨機武器&lt;"
+        android:id="@+id/desc_weapon"
+        android:layout_below="@+id/placeimg"
+        android:layout_toRightOf="@+id/patrolvalue"
+        android:layout_toEndOf="@+id/patrolvalue" />
+</RelativeLayout>
