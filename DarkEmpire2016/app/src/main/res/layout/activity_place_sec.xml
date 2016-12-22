@@ -107,16 +107,16 @@
         android:maxHeight="80dp"
         android:maxWidth="80dp"
         android:layout_alignTop="@+id/belong"
-        android:layout_toRightOf="@+id/patrolvalue"
-        android:layout_toEndOf="@+id/patrolvalue" />
+        android:layout_alignLeft="@+id/desc_weapon"
+        android:layout_alignStart="@+id/desc_weapon" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=">本日隨機武器&lt;"
+        android:text="淨化聖水選擇"
         android:id="@+id/desc_weapon"
-        android:layout_below="@+id/placeimg"
-        android:layout_toRightOf="@+id/patrolvalue"
-        android:layout_toEndOf="@+id/patrolvalue" />
+        android:layout_above="@+id/weapon"
+        android:layout_alignLeft="@+id/fight"
+        android:layout_alignStart="@+id/fight" />
 </RelativeLayout>

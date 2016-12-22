@@ -12,5 +12,6 @@
     <string name="title_activity_firstpage">遊戲登入頁</string>
     <string name="title_activity_story">故事大綱</string>
     <string name="title_activity_coin_list">金幣清單</string>
+    <string name="title_activity_coin_search">搜尋金幣</string>
 
 </resources>

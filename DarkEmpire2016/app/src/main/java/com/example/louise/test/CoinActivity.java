@@ -51,8 +51,6 @@ import java.util.Random;
 
 public class CoinActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-
-    private Button searchcoin;
     private Double currla, currlo;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
@@ -81,7 +79,6 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coin);
-        getWindow().setBackgroundDrawableResource(R.drawable.bg);
 
         try {
 
@@ -116,29 +113,9 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
             }
         } catch (Exception e) {}
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.coinmap);
-        searchcoin = (Button) findViewById(R.id.searchcoin);
-        searchcoin.setTextColor(0xffffffff);
-
         mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.coinmap);
-
         mFragment.getMapAsync(this);
 
-        searchcoin.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (intent_me.equals(che_me)) {
-                    coinbtn = MediaPlayer.create(CoinActivity.this, R.raw.searchcoin);
-                    coinbtn.start();
-                    coinbtn.seekTo(200);
-                }
-                Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-                if (mLastLocation != null) {
-                    onLocationChanged(mLastLocation);
-                }
-            }
-        });
 
     }
 
@@ -190,8 +167,12 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
 
             String placejson = "";
             try {
-                placejson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/runeTradeRecord/search_rune/" + currlo + "/" + currla + "/");
+//                placejson = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/runeTransaction/app/search/" + currlo + "/" + currla + "/");
 
+                placejson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/runeTradeRecord/search_rune/" + currlo + "/" + currla + "/");
+//                Toast.makeText(CoinActivity.this, placejson, Toast.LENGTH_LONG).show();
+                Log.e("placejson", placejson);
+//                Log.e("0_placejson", o_placejson);
             } catch (ProtocolException e) {
                 e.printStackTrace();
             }
@@ -209,7 +190,7 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
             }
             for (int i = 0; i < placelist.length(); i++) {
                 try {
-                    bob = placelist.getJSONObject(i).getInt("place_id");
+                    bob = placelist.getJSONObject(i).getInt("id");
                     runeid = placelist.getJSONObject(i).getInt("rune_id");
                     search_la = placelist.getJSONObject(i).getDouble("latitude");
                     search_lo = placelist.getJSONObject(i).getDouble("longitude");
@@ -222,29 +203,12 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
 
-//            LatLng c = new LatLng(currla, currlo);
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(whole, 19));
-//            Toast.makeText(CoinActivity.this, bobid.toString(), Toast.LENGTH_SHORT).show();
+            Log.e("bobid", bobid.toString());
+            Log.e("runeid_l", runeid_l.toString());
+            Log.e("longitude", longitude.toString());
+            Log.e("latitude", latitude.toString());
 
-//
-//            Double r = 0.0005/2;
-//            Double maxlat = mLastLocation.getLatitude() + r;
-//            Double minlat = mLastLocation.getLatitude() - r;
-//            Double maxlon = mLastLocation.getLongitude() + r;
-//            Double minlon = mLastLocation.getLongitude() - r;
-//            Double resultlat = 0.0;
-//            Double resultlon = 0.0;
-//            Random random = new Random();
-//
-//            for (int ii = 0; ii < 10; ii++) {
-//                resultlat = minlat + random.nextDouble() * (maxlat - minlat);
-//                resultlat = ((int) (resultlat * 1000000)) / 1000000.0;
-//                latitude.add(resultlat);
-//
-//                resultlon = minlon + random.nextDouble() * (maxlon - minlon);
-//                resultlon = ((int) (resultlon * 1000000)) / 1000000.0;
-//                longitude.add(resultlon);
-//            }
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(whole, 19));
 
             int ss = latitude.size();
             for (int l = 0; l < ss; l++) {
@@ -278,7 +242,7 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
                         String re = "";
                         try {
 //                            Toast.makeText(CoinActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
-                            re = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/runeTradeRecord/get_rune/" + Integer.parseInt(marker.getTitle()) + "/" + txt_user + "/");
+                            re = Httpconnect.httpost("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/runeTradeRecord/get_rune/" + Integer.parseInt(marker.getTitle()) + "/" + txt_user + "/");
                         } catch (Exception e) {
                             Toast.makeText(CoinActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                         }
@@ -310,70 +274,10 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-
-        // 存交易記錄
-//        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                marker.remove();
-////                Toast.makeText(CoinActivity.this, "runeid= "+marker.getTitle()+"\nposition= "+currla+","+currlo,Toast.LENGTH_SHORT).show();
-//                String re = "";
-//                if (marker.getTitle().equals("0")) {
-//                    try {
-////                        re = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/runeTransaction/app/pickup/"+ bobid.get(l)+"/44/");
-//                        re = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/userRuneList/app/get/" + txt_user + "/1/1");
-//                    } catch (Exception e) {
-//                        Toast.makeText(CoinActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-//                        e.printStackTrace();
-//                    }
-//                } else if (marker.getTitle().equals("1")){
-//                    try {
-//                        re = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/userRuneList/app/get/" + txt_user + "/2/1");
-//                    } catch (Exception e) {
-//                        Toast.makeText(CoinActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-//                        e.printStackTrace();
-//                    }
-//                }
-////                Toast.makeText(CoinActivity.this, re, Toast.LENGTH_SHORT).show();
-//                // result
-//                if (re.equals("success\n")) {
-//                    final Toast toast2 = Toast.makeText(CoinActivity.this, "got it ^^", Toast.LENGTH_SHORT);
-//                    toast2.show();
-//                    Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            toast2.cancel();
-//                        }
-//                    }, 200);
-//                } else {
-//                    final Toast toast2 = Toast.makeText(CoinActivity.this, "you can't get it ><", Toast.LENGTH_SHORT);
-//                    toast2.show();
-//                    Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            toast2.cancel();
-//                        }
-//                    }, 500);
-//                }
-//                return true;
-//            }
-//        });
-
-//        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//            @Override
-//            public void onInfoWindowClick(Marker marker) {
-////                Toast.makeText(CoinActivity.this, marker.toString(), Toast.LENGTH_SHORT).show();
-//                marker.remove();
-//            }
-//        });
-
-
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); //5 seconds
-        mLocationRequest.setFastestInterval(3000); //3 seconds
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+//        mLocationRequest = new LocationRequest();
+//        mLocationRequest.setInterval(5000); //5 seconds
+//        mLocationRequest.setFastestInterval(3000); //3 seconds
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
 
 //        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -390,22 +294,5 @@ public class CoinActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_SHORT).show();
     }
-
-    public void onLocationChanged(Location location) {
-        Toast.makeText(this, "回到目前範圍", Toast.LENGTH_SHORT).show();
-        //place marker at current position
-        //mGoogleMap.clear();
-//        if (currLocationMarker != null) {
-//            currLocationMarker.remove();
-//        }
-//        latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(latLng);
-//        markerOptions.title("我在這裡");
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-    }
-
 
 }

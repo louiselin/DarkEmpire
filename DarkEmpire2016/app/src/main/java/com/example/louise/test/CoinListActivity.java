@@ -291,10 +291,11 @@ public class CoinListActivity extends AppCompatActivity implements LocationListe
 //                                                    res = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/runeTransaction/app/throw/" + txt_user
 //                                                            + "/" + runeid + "/" + runenum + "/" + mapcurrlo + "/" + mapcurrla + "/");
 
-                                                        res = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/userRune/throw_rune/" + txt_user
+                                                        res = Httpconnect.httpost("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/userRune/throw_rune/" + txt_user
                                                             + "/" + runeid + "/" + runenum + "/" + mapcurrlo + "/" + mapcurrla + "/");
-                                                    if (!res.equals("error")) {
-//                                                        Toast.makeText(CoinListActivity.this, "剩下 " + Integer.toString(last) + " 個, 重整畫面更新 ><", Toast.LENGTH_SHORT).show();
+
+                                                    if (res.replace("\n", "").replace(" ", "").equals("success")) {
+                                                        Toast.makeText(CoinListActivity.this, "剩下 " + Integer.toString(last) + " 個", Toast.LENGTH_SHORT).show();
                                                         refresh();
                                                     } else {
                                                         Toast.makeText(CoinListActivity.this, "輸入有誤 QQQQ", Toast.LENGTH_SHORT).show();
@@ -307,9 +308,9 @@ public class CoinListActivity extends AppCompatActivity implements LocationListe
 //                                                res = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/runeTransaction/app/throw/" + txt_user
 //                                                        + "/" + runeid + "/" + runenum + "/" + mapcurrlo + "/" + mapcurrla + "/");
 
-                                                res = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/userRune/throw_rune/" + txt_user
+                                                res = Httpconnect.httpost("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/userRune/throw_rune/" + txt_user
                                                         + "/" + runeid + "/" + runenum + "/" + mapcurrlo + "/" + mapcurrla + "/");
-                                                if (!res.equals("error")) {
+                                                if (res.replace("\n", "").replace(" ", "").equals("success")) {
 //                                                    Toast.makeText(CoinListActivity.this, "剩下 " + Integer.toString(last) + " 個, 重整畫面更新 ><", Toast.LENGTH_SHORT).show();
                                                     refresh();
                                                 } else {
@@ -317,7 +318,7 @@ public class CoinListActivity extends AppCompatActivity implements LocationListe
                                                 }
                                             }
                                         } catch (Exception e) {
-                                            Toast.makeText(CoinListActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(CoinListActivity.this, "Error " + e.toString(), Toast.LENGTH_SHORT).show();
                                         }
 
                                     }

@@ -31,15 +31,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -93,16 +97,17 @@ public class PlaceSecActivity extends AppCompatActivity {
     private int partyid = 0;
     private String txt_user = "";
     private JSONArray wlist = null;
-    private int weaponid = 0;
+//    private int weaponid = 0;
     private int w = 0;
     private int num = 0;
     private String weaponname = "";
     List<String> wname = new ArrayList<>();
     List<Integer> wid = new ArrayList<>();
-    private int powerup = 0;
+//    private int powerup = 0;
     private TextView desc_weapon;
     private String re_powerup = "";
-    private String re_p = "";
+//    private String re_p = "";
+    private int w_item_id = 0;
 
 
 
@@ -121,22 +126,6 @@ public class PlaceSecActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_sec);
-//        Bundle bundle = this.getIntent().getExtras();
-//        placeidd = bundle.getInt("placeid");
-//        placenamee = bundle.getString("placename");
-
-
-//        try {
-//            FileWriter fw = new FileWriter(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "placelog.txt"));
-//            final BufferedWriter bw = new BufferedWriter(fw); //將BufferedWeiter與FileWrite物件做連結
-//            bw.write(placeidd + "," + placenamee);
-//            bw.close();
-////            Toast.makeText(SettingActivity.this, "save success", Toast.LENGTH_SHORT).show();
-//        } catch (Exception e) {
-//            Toast.makeText(PlaceSecActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-//        }
-
-
         getWindow().setBackgroundDrawableResource(R.drawable.bg);
 
         try {
@@ -169,7 +158,6 @@ public class PlaceSecActivity extends AppCompatActivity {
             BufferedReader br = new BufferedReader(fr);
 
             String temp = br.readLine(); //readLine()讀取一整行
-//            Toast.makeText(SettingActivity.this, temp, Toast.LENGTH_LONG).show();
 
             if (temp != null) {
                 String[] datas = temp.split(",");
@@ -177,71 +165,6 @@ public class PlaceSecActivity extends AppCompatActivity {
                 placeid = Integer.valueOf(datas[0]);
             }
         } catch (Exception e) {}
-
-//        switch (StoryActivity.party) {
-//            case "Sinae": getWindow().setBackgroundDrawableResource(R.drawable.blue); break;
-//            default: getWindow().setBackgroundDrawableResource(R.drawable.red); break;
-//        }
-
-        // id = 10
-//        if(placeid == 10) {
-//            Intent intent = new Intent();
-//            intent.setClass(PlaceSecActivity.this, Id10PrisionActivity.class);
-//            finish();
-//            startActivity(intent);
-//        }
-
-
-        try {
-
-            FileReader fr = new FileReader(new File("sdcard/darkempire/weapon.txt"));
-            BufferedReader br = new BufferedReader(fr);
-
-            String temp = br.readLine(); //readLine()讀取一整行
-//            Toast.makeText(SettingActivity.this, temp, Toast.LENGTH_LONG).show();
-
-            if (temp != null) {
-                weaponid = Integer.parseInt(temp);
-
-            } else {
-                weaponid = 1;
-            }
-        } catch (Exception e) {}
-
-//        Random random = new Random();
-//        randomInt = random.nextInt(wlist.length());
-
-
-        try {
-            re_powerup = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/sforce/app/powerup/" + partyid + "/");
-            re_p = re_powerup.replace("\n", "").replace(" ", "");
-        } catch (Exception e) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-        }
-
-        int d_fuel = 0;
-        int d_power = 0;
-        if (weaponid == 10) {
-            d_fuel = 1;
-            d_power = 100;
-        } else if (weaponid == 2) {
-            d_fuel = 2;
-            d_power = 10;
-        } else {
-            d_fuel = 1;
-            d_power = 1;
-        }
-
-        desc_weapon = (TextView) findViewById(R.id.desc_weapon);
-        desc_weapon.setText("武器"+weaponid+", 馬納消耗"+d_fuel+"\n攻擊 "+d_power+"(+"+re_p+")");
-
-//        // super power loading
-//        if(placeid == 52) {
-//            Intent intent = new Intent();
-//            intent.setClass(PlaceSecActivity.this, PuzzleActivity.class);
-//            finish();
-//            startActivity(intent);
-//        }
 
 
 
@@ -272,30 +195,168 @@ public class PlaceSecActivity extends AppCompatActivity {
         String skipMessage = settings.getString("skipMessage", "NOT checked");
         if (!skipMessage.equals("checked"))
             ad.show();
-//        ad.show();
 
 
         String placejson = "";
         String imagejson = "";
         String stelejson = "";
+        String weaponjson = "";
+
+        String n_placejson = "";
         try {
+//            String imagetest = Httpconnect.httpget("http://140.119.163.40:8080/GameImg/image/app/" + placeid);
+//            Toast.makeText(PlaceSecActivity.this, imagetest, Toast.LENGTH_SHORT).show();
+            weaponjson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/item/list");
+
             placejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/place/" + placeid);
             imagejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/image/" + placeid);
             stelejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/stele/" + placeid);
+
+            n_placejson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/placeState/list");
+
+
         } catch (ProtocolException e) {
             e.printStackTrace();
         }
+
+        int camp_id = 0, keeper_id = 0, n_hp = 0;
+        try {
+            JSONArray n_placelist = new JSONArray(n_placejson);
+            int p =  placeid - 1;
+            camp_id = n_placelist.getJSONObject(p).getInt("camp_id");
+            keeper_id = n_placelist.getJSONObject(p).getInt("keeper_id");
+            n_hp = n_placelist.getJSONObject(p).getInt("hp");
+
+            Log.e("placeid info", p+"");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String placename = "";
         String image = "";
-
-//            String hp = "";
         String camp = "";
-//            String name = "";
+        final int weapon_id = 0;
+        int weapon_mana = 0;
+        String weapon_name = "";
+        int weapon_atk = 0;
+
+        desc_weapon = (TextView) findViewById(R.id.desc_weapon);
+        weapon = (ImageView) findViewById(R.id.weapon);
+        weapon.setImageResource(R.drawable.pill_gray);
+        weapon.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    String weapon_userjson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire//app/ver1.0/userItem/"+txt_user);
+                    final JSONArray weapon_list = new JSONArray(weapon_userjson);
+
+                    final String[] weapon_c = {"不用聖水",
+                            "紅聖水x"+weapon_list.getJSONObject(0).getInt("quantity"),
+                            "黃聖水x"+weapon_list.getJSONObject(2).getInt("quantity"),
+                            "藍聖水x"+weapon_list.getJSONObject(3).getInt("quantity")};
+
+
+                    final Integer[] icons = new Integer[] {R.drawable.pill_gray
+                            , R.drawable.pill_red
+                            , R.drawable.pill_yell
+                            , R.drawable.pill_blue};
+
+
+                    ListAdapter adapter = new ArrayAdapter<String>(
+                            getApplicationContext(), R.layout.weapon_chose, weapon_c) {
+
+                        ViewHolder holder;
+
+                        class ViewHolder {
+                            ImageView icon;
+                            TextView title;
+                        }
+
+                        public View getView(int position, View convertView,
+                                            ViewGroup parent) {
+                            final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                                    .getSystemService(
+                                            Context.LAYOUT_INFLATER_SERVICE);
+
+                            if (convertView == null) {
+                                convertView = inflater.inflate(
+                                        R.layout.weapon_chose, null);
+
+                                holder = new ViewHolder();
+                                holder.icon = (ImageView) convertView.findViewById(R.id.w_icon);
+                                holder.title = (TextView) convertView.findViewById(R.id.w_title);
+                                convertView.setTag(holder);
+                            } else {
+                                // view already defined, retrieve view holder
+                                holder = (ViewHolder) convertView.getTag();
+                            }
+
+                            holder.title.setText(weapon_c[position]);
+                            holder.icon.setImageResource(icons[position]);
+
+                            return convertView;
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PlaceSecActivity.this);
+                    builder.setAdapter(adapter,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    w_item_id = item + 1;
+//                                    Toast.makeText(PlaceSecActivity.this, "You selected: " + weapon_c[item], Toast.LENGTH_LONG).show();
+
+                                    try {
+                                        switch (w_item_id) {
+                                            case 2: {
+                                                weapon.setImageResource(R.drawable.pill_red);
+                                                desc_weapon.setText("[選擇] 紅聖水x" + weapon_list.getJSONObject(0).getInt("quantity"));
+                                            }
+                                            break;
+                                            case 3: {
+                                                weapon.setImageResource(R.drawable.pill_yell);
+                                                desc_weapon.setText("[選擇] 黃聖水x" + weapon_list.getJSONObject(2).getInt("quantity"));
+                                            }
+                                            break;
+                                            case 4: {
+                                                weapon.setImageResource(R.drawable.pill_blue);
+                                                desc_weapon.setText("[選擇] 藍聖水x" + weapon_list.getJSONObject(3).getInt("quantity"));
+                                            }
+                                            break;
+                                            default: {
+                                                weapon.setImageResource(R.drawable.pill_gray);
+                                                desc_weapon.setText("[選擇] 不用聖水");
+                                            }
+                                            break;
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+//                                    Toast.makeText(PlaceSecActivity.this, "You selected: " + w_item_id, Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
         try {
             JSONArray placelist = new JSONArray(placejson);
             JSONArray imagelist = new JSONArray(imagejson);
             JSONArray stelelist = new JSONArray(stelejson);
+            JSONArray weaponlist = new JSONArray(weaponjson);
+
+
+
+
 
             placename = placelist.getJSONObject(0).getString("name");
             image = imagelist.getJSONObject(0).getString("image");
@@ -316,52 +377,61 @@ public class PlaceSecActivity extends AppCompatActivity {
         myTextView5.setTextColor(Color.BLACK);
 
         TextView tv = (TextView) findViewById(R.id.belong);
-        switch (name) {
-            case "Ruyen":
-                tv.setText("屬於:" + camp);
-                break;
-            default:
-                tv.setText("屬於:" + txt_party + camp);
-                break;
-        }
+//        switch (name) {
+//            case "Ruyen":
+//                tv.setText("屬於:" + camp);
+//                break;
+//            default:
+//                tv.setText("屬於:" + txt_party + camp);
+//                break;
+//        }
+        tv.setText("屬於:" + camp_id);
         tv.setTextSize(15);
         tv.setTextColor(Color.BLACK);
 
         TextView myTextView0 = (TextView) findViewById(R.id.lordname);
-        myTextView0.setText("石碑守護者:" + name);
+//        myTextView0.setText("石碑守護者:" + name);
+        myTextView0.setText("石碑守護者:" + keeper_id);
         myTextView0.setTextSize(15);
         myTextView0.setTextColor(Color.BLACK);
 
         TextView myTextView1 = (TextView) findViewById(R.id.blood);
-        switch (name) {
-            case "Ruyen":
-                myTextView1.setText("敵方的生命值:" + hp);
+//        switch (name) {
+//            case "Ruyen":
+//                myTextView1.setText("敵方的生命值:" + hp);
+//                break;
+//            default:
+//                myTextView1.setText(txt_party + "方生命值:" + hp);
+//                break;
+//        }
+        switch (camp_id) {
+            case 3: myTextView1.setText("敵方的生命值:" + n_hp);
                 break;
-            default:
-                myTextView1.setText(txt_party + "方生命值:" + hp);
+            default: myTextView1.setText(txt_party + "方生命值:" + n_hp);
                 break;
         }
         myTextView1.setTextSize(15);
         myTextView1.setTextColor(Color.BLACK);
 
-//            ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-//            ratingBar.setRating((Float.parseFloat(hp))/5);
-//        Resources res = getResources();
+        myProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        myProgressBar.setProgress(n_hp);
+        Resources res = getResources();
 //        switch (name) {
-//            case "Ruyen": ratingBar.setProgressDrawable(res.getDrawable(R.drawable.ratingbar_color));break;
+//            case "Ruyen":
+//                myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
+//                break;
 //            default: {
-//                if(StoryActivity.party == "Sinae") ratingBar.setProgressDrawable(res.getDrawable(R.drawable.ratingbar_color_s));
-//                else ratingBar.setProgressDrawable(res.getDrawable(R.drawable.ratingbar_color_a)); break;
+//                if (txt_party.equals("Sinae")) {
+//                    myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.green_progressbar));
+//                    break;
+//                } else {
+//                    myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.red_progressbar));
+//                    break;
+//                }
 //            }
 //        }
-//            Toast.makeText(PlaceSecActivity.this, String.valueOf((Float.parseFloat(hp))/5) + " " + name, Toast.LENGTH_SHORT).show();
-
-        myProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        myProgressBar.setProgress(Integer.parseInt(hp) * 5);
-        Resources res = getResources();
-        switch (name) {
-            case "Ruyen":
-                myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
+        switch (camp_id) {
+            case 3: myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
                 break;
             default: {
                 if (txt_party.equals("Sinae")) {
@@ -379,7 +449,7 @@ public class PlaceSecActivity extends AppCompatActivity {
         thirdImage.setImageDrawable(loadImageFromURL(image));
         image = null;   // important!!
 
-        String url = "http://140.119.163.40:8080/Spring08/app/user/" + txt_user;
+        String url = "http://140.119.163.40:8080/DarkEmpire/app/ver1.0/totalRecord/list/" + txt_user + "/";
         String userjson = "";
 
         try {
@@ -393,72 +463,14 @@ public class PlaceSecActivity extends AppCompatActivity {
 
         try {
             JSONArray userlist = new JSONArray(userjson);
-            votes = userlist.getJSONObject(0).getInt("votes");
-            username = userlist.getJSONObject(0).getString("name");
+            votes = userlist.getJSONObject(0).getInt("mana_now");
+            username = userlist.getJSONObject(0).getString("user_name");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         final TextView textview = (TextView) findViewById(R.id.patrolvalue);
         textview.setText("馬納值:" + votes);
-
-        // weapon here
-        weapon = (ImageView) findViewById(R.id.weapon);
-        weaponlist.add(R.drawable.weapon1);
-        weaponlist.add(R.drawable.weapon2);
-        weaponlist.add(R.drawable.weapon3);
-
-
-        weapon.setImageResource(weaponlist.get(weaponid));
-        switch (weaponid) {
-            case 1: {
-                weapon.setImageResource(R.drawable.weapon2);
-                break;
-            } case 2: {
-                weapon.setImageResource(R.drawable.weapon3);
-                break;
-            } default: {
-                weapon.setImageResource(R.drawable.weapon1);
-                break;
-            }
-        }
-//        weapon.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN: {
-//                        switch (randomInt) {
-//                            case 1: {
-//                                weapon.setImageResource(0);
-//                                weapon.setImageResource(R.drawable.weapon2);
-//                                weapon.setRotation(30);
-//                                break;
-//                            } case 2: {
-//                                weapon.setImageResource(0);
-//                                weapon.setImageResource(R.drawable.weapon3);
-//                                weapon.setRotation(30);
-//                                break;
-//                            } default: {
-//                                weapon.setImageResource(0);
-//                                weapon.setImageResource(R.drawable.weapon1);
-//                                weapon.setRotation(30);
-//                                break;
-//                            }
-//                        }
-//                        break;
-//                    }
-//                    case MotionEvent.ACTION_UP:
-//                    case MotionEvent.ACTION_CANCEL: {
-//                        weapon.setImageResource(0);
-//                        weapon.setImageResource(weaponlist.get(randomInt));
-//                        weapon.setRotation(0);
-//                        break;
-//                    }
-//                }
-//                return true;
-//            }
-//        });
-
 
 
         final TextView myTextView6 = (TextView) findViewById(R.id.fight);
@@ -473,7 +485,7 @@ public class PlaceSecActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                myTextView6.setTextColor(Color.RED);
+//                myTextView6.setTextColor(Color.RED);
                 // check setting switch button
                 try {
 
@@ -501,190 +513,26 @@ public class PlaceSecActivity extends AppCompatActivity {
                     soundpunch.start();
                     soundpunch.seekTo(100);
                 }
-//                Toast.makeText(PlaceSecActivity.this, "me " + intent_me+ " ,vi "+intent_vi, Toast.LENGTH_SHORT).show();
 
 
-                String stelejson = "";
-                String stelename = "";
-                String userjson = "";
-                String username = "";
-                String votes = "";
+
+//                /app/ver1.0/checkinPurify/{user_id}/{place_id}/{action}/{longitude}/{latitude}/{item_id}
+
+                String fight = "";
                 try {
-                    stelejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/stele/" + placeid);
-                    userjson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/user/" + txt_user);
-                    JSONArray stelelist = new JSONArray(stelejson);
-                    JSONArray userlist = new JSONArray(userjson);
-                    username = userlist.getJSONObject(0).getString("name");
-                    stelename = stelelist.getJSONObject(0).getString("name");
-                    votes = userlist.getJSONObject(0).getString("votes");
-
-                    if (stelename.equals(username) || votes.equals("0")) {
-                        final Toast toast = Toast.makeText(PlaceSecActivity.this, "攻擊對象是自己或\n 已無馬納值哦QQ", Toast.LENGTH_SHORT);
-                        toast.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                toast.cancel();
-                            }
-                        }, 800);
-                    } else if (!username.equals("Ruyen")){
-                        String att = "";
-                        String api = "";
-                        String fuel = "";
-
-
-
-
-                        try {
-                            switch (weaponid) {
-                                case 2: {
-
-//                                    Toast.makeText(PlaceSecActivity.this, re_powerup+"", Toast.LENGTH_SHORT).show();
-                                    powerup = 10+Integer.parseInt(re_p);
-//                                    fuel = "/2/10/";
-                                    fuel = "/2/"+String.valueOf(powerup)+"/";
-                                    api = "http://140.119.163.40:8080/Spring08/app/stele/attack/" + placeid + "/" + txt_user + fuel;
-                                    att = Httpconnect.httpget(api);
-                                    final Toast toast = Toast.makeText(PlaceSecActivity.this, "減少敵方生命值", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            toast.cancel();
-                                        }
-                                    }, 300);
-
-                                    break;
-                                }
-                                case 1: {
-//                                    fuel = "/1/1/";
-                                    powerup = 1+Integer.parseInt(re_p);
-//                                    Toast.makeText(PlaceSecActivity.this, re_powerup+"", Toast.LENGTH_SHORT).show();
-                                    fuel = "/1/"+String.valueOf(powerup)+"/";
-                                    api = "http://140.119.163.40:8080/Spring08/app/stele/attack/" + placeid + "/" + txt_user + fuel;
-                                    att = Httpconnect.httpget(api);
-                                    final Toast toast = Toast.makeText(PlaceSecActivity.this, "減少敵方生命值", Toast.LENGTH_SHORT);
-                                    toast.show();
-                                    Handler handler = new Handler();
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            toast.cancel();
-                                        }
-                                    }, 300);
-
-                                    break;
-                                }
-                                default: {
-
-//                                    if (w == 0) {
-                                        api = "http://140.119.163.40:8080/Spring08/app/stele/attack/" + placeid + "/" + txt_user + "/1/100/";
-                                        att = Httpconnect.httpget(api);
-
-//                                        Toast.makeText(PlaceSecActivity.this, att, Toast.LENGTH_LONG).show();
-                                        if (att.replace("\n", "").replace(" ", "").equals("succes")) {
-                                            try {
-                                                weapon.setImageResource(0);
-                                                weapon.setImageResource(R.drawable.weapon2);
-                                                FileWriter fw = new FileWriter(new File("sdcard/darkempire/weapon.txt"));
-                                                final BufferedWriter bw = new BufferedWriter(fw); //將BufferedWeiter與FileWrite物件做連結
-                                                bw.write("1");
-                                                bw.close();
-                                                final Toast toast = Toast.makeText(PlaceSecActivity.this, "減少敵方生命值", Toast.LENGTH_SHORT);
-                                                toast.show();
-                                                Handler handler = new Handler();
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        toast.cancel();
-                                                    }
-                                                }, 1000);
-                                                finish();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        } else {
-                                            weapon.setImageResource(0);
-                                            weapon.setImageResource(R.drawable.weapon2);
-                                            Toast.makeText(PlaceSecActivity.this, "超原力已釋放, 要等下次武器生成! @@", Toast.LENGTH_SHORT).show();
-                                        }
-
-
-//                                        w++;
-//                                    } else {
-//                                        fuel = "/1/1/";
-//                                        api = "http://140.119.163.40:8080/Spring08/app/stele/attack/" + placeid + "/" + txt_user + fuel;
-//                                        att = Httpconnect.httpget(api);
-//                                    }
-//                                    myTextView6.setEnabled(false);
-
-                                    break;
-                                }
-                            }
-
-                        } catch (ProtocolException e) {
-                            e.printStackTrace();
-                        }
-
-
-//                        if (!att.equals("")) myTextView6.setTextColor(Color.WHITE);
-                    } else {
-                        final Toast toast = Toast.makeText(PlaceSecActivity.this, "不可以打同類!!", Toast.LENGTH_SHORT);
-                        toast.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                toast.cancel();
-                            }
-                        }, 800);
-                    }
-
+                    fight = Httpconnect.httpost("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/checkinPurify/"
+                            + txt_user + "/" + placeid + "/2/" + MapsActivity.currlo + "/"
+                            + MapsActivity.currla + "/" + w_item_id + "/");
+                    Log.e("lo", MapsActivity.currlo+"");
+                    Log.e("la", MapsActivity.currla+"");
+                    Toast.makeText(PlaceSecActivity.this, fight, Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                String ree = "";
-                int rr = 0;
-                int runeid = 0;
-                int stone = 0;
-                try {
-                    Random random = new Random();
-                    rr = random.nextInt(2);
-                    if (rr == 0) {
-                        runeid = 1;
-                        stone = 5;
-                    } else {
-                        runeid = 2;
-                        stone = 3;
-                    }
-                    ree = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/userRuneList/app/get/" + txt_user + "/"+runeid+"/"+stone+"/");
-                } catch (Exception e) {
-                    Toast.makeText(PlaceSecActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                }
-                // result
-                if (ree.equals("success\n")) {
-                    final Toast toast2 = Toast.makeText(PlaceSecActivity.this, "got "+runeid+" ^^", Toast.LENGTH_SHORT);
-                    toast2.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            toast2.cancel();
-                        }
-                    }, 200);
-                } else {
-                    final Toast toast2 = Toast.makeText(PlaceSecActivity.this, "you can't get "+runeid+" ><", Toast.LENGTH_SHORT);
-                    toast2.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            toast2.cancel();
-                        }
-                    }, 500);
-                }
+
+                // TODO FIGHT RESULT HERE
+
+
                 refresh();
             }
         });
@@ -699,11 +547,14 @@ public class PlaceSecActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                myTextView8.setTextColor(Color.RED);
+//                myTextView8.setTextColor(Color.RED);
 
                 String re = "";
                 try {
-                    re = Httpconnect.httpost2("http://140.119.163.40:8080/Spring08/app/checkinList/" + txt_user, "id=0&placeid=" + placeid + "&longitude=121.2&latitude=223.5");
+//                    re = Httpconnect.httpost2("http://140.119.163.40:8080/Spring08/app/checkinList/" + txt_user, "id=0&placeid=" + placeid + "&longitude=121.2&latitude=223.5");
+                    re = Httpconnect.httpost("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/checkinPurify/"
+                            + txt_user + "/" + placeid + "/1/" + MapsActivity.currlo + "/"
+                            + MapsActivity.currla + "/" + w_item_id + "/");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -715,54 +566,45 @@ public class PlaceSecActivity extends AppCompatActivity {
                 }
 
                 if (intent_me.equals(che_me)) {
-                    if (re.equals("success")) {
+                    if (re.replace("\n", "").equals("success")) {
                         soundjump = MediaPlayer.create(PlaceSecActivity.this, R.raw.jump);
                         soundjump.start();
                         soundjump.seekTo(300);
                     } else {
                         soundjump = MediaPlayer.create(PlaceSecActivity.this, R.raw.hax);
                         soundjump.start();
-//                        soundjump.seekTo(100);
                     }
                 }
-//                Toast.makeText(PlaceSecActivity.this, "me " + intent_me+ " ,vi "+intent_vi, Toast.LENGTH_SHORT).show();
 
+                Toast.makeText(PlaceSecActivity.this, re.replace("\n", ""), Toast.LENGTH_LONG).show();
 
+//                if (!re.equals("success")) {
+//                    final Toast toast2 = Toast.makeText(PlaceSecActivity.this, re, Toast.LENGTH_SHORT);
+//                    toast2.show();
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            toast2.cancel();
+//                        }
+//                    }, 500);
+//                } else {
+//                    final Toast t = Toast.makeText(PlaceSecActivity.this, "馬納值增加", Toast.LENGTH_SHORT);
+//                    t.show();
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            t.cancel();
+//                        }
+//                    }, 300);
+//                }
 
-                if (!re.equals("success")) {
-                    final Toast toast2 = Toast.makeText(PlaceSecActivity.this, re, Toast.LENGTH_SHORT);
-                    toast2.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            toast2.cancel();
-                        }
-                    }, 500);
-                } else {
-                    final Toast t = Toast.makeText(PlaceSecActivity.this, "馬納值增加", Toast.LENGTH_SHORT);
-                    t.show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            t.cancel();
-                        }
-                    }, 300);
-                }
-                if (re != "") {
-                    myTextView8.setTextColor(Color.WHITE);
-                }
 
                 refresh();
 
             }
         });
-
-//        handler.postDelayed(runnable, 2000);
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -788,41 +630,149 @@ public class PlaceSecActivity extends AppCompatActivity {
 
 
     private void refresh() {
-        String placejson = "";
-        String userjson = "";
-        String stelejson = "";
+
+
+        // TODO refresh result here
+
+        String weaponjson = "";
+        String n_placejson = "";
         try {
-            placejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/place/" + placeid);
-            userjson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/user/" + txt_user);
-            stelejson = Httpconnect.httpget("http://140.119.163.40:8080/Spring08/app/stele/" + placeid);
+            weaponjson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/item/list");
+            n_placejson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire/app/ver1.0/placeState/list");
         } catch (ProtocolException e) {
             e.printStackTrace();
         }
 
-        String placename = "";
-        int vote = 0;
-        String hp = "";
-        String camp = "";
-        String name = "";
-
+        int camp_id = 0, keeper_id = 0, n_hp = 0;
         try {
-            JSONArray placelist = new JSONArray(placejson);
-            JSONArray userlist = new JSONArray(userjson);
-            JSONArray stelelist = new JSONArray(stelejson);
+            JSONArray n_placelist = new JSONArray(n_placejson);
+            int p =  placeid - 1;
+            camp_id = n_placelist.getJSONObject(p).getInt("camp_id");
+            keeper_id = n_placelist.getJSONObject(p).getInt("keeper_id");
+            n_hp = n_placelist.getJSONObject(p).getInt("hp");
 
-
-            placename = placelist.getJSONObject(0).getString("name");
-            vote = userlist.getJSONObject(0).getInt("votes");
-            hp = stelelist.getJSONObject(0).getString("hp");
-            camp = stelelist.getJSONObject(0).getString("camp");
-            name = stelelist.getJSONObject(0).getString("name");
-
-        } catch (JSONException e) {
+            Log.e("placeid info", p+"");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        TextView textview = (TextView) findViewById(R.id.patrolvalue);
-        textview.setText("馬納值:" + vote);
+        String placename = "";
+        String image = "";
+        String camp = "";
+        final int weapon_id = 0;
+        int weapon_mana = 0;
+        String weapon_name = "";
+        int weapon_atk = 0;
+
+        desc_weapon = (TextView) findViewById(R.id.desc_weapon);
+        weapon = (ImageView) findViewById(R.id.weapon);
+        weapon.setImageResource(R.drawable.pill_gray);
+        weapon.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    String weapon_userjson = Httpconnect.httpget("http://140.119.163.40:8080/DarkEmpire//app/ver1.0/userItem/"+txt_user);
+                    final JSONArray weapon_list = new JSONArray(weapon_userjson);
+
+                    final String[] weapon_c = {"不用聖水",
+                            "紅聖水x"+weapon_list.getJSONObject(0).getInt("quantity"),
+                            "黃聖水x"+weapon_list.getJSONObject(2).getInt("quantity"),
+                            "藍聖水x"+weapon_list.getJSONObject(3).getInt("quantity")};
+
+
+                    final Integer[] icons = new Integer[] {R.drawable.pill_gray
+                            , R.drawable.pill_red
+                            , R.drawable.pill_yell
+                            , R.drawable.pill_blue};
+
+
+                    ListAdapter adapter = new ArrayAdapter<String>(
+                            getApplicationContext(), R.layout.weapon_chose, weapon_c) {
+
+                        ViewHolder holder;
+
+                        class ViewHolder {
+                            ImageView icon;
+                            TextView title;
+                        }
+
+                        public View getView(int position, View convertView,
+                                            ViewGroup parent) {
+                            final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+                                    .getSystemService(
+                                            Context.LAYOUT_INFLATER_SERVICE);
+
+                            if (convertView == null) {
+                                convertView = inflater.inflate(
+                                        R.layout.weapon_chose, null);
+
+                                holder = new ViewHolder();
+                                holder.icon = (ImageView) convertView.findViewById(R.id.w_icon);
+                                holder.title = (TextView) convertView.findViewById(R.id.w_title);
+                                convertView.setTag(holder);
+                            } else {
+                                // view already defined, retrieve view holder
+                                holder = (ViewHolder) convertView.getTag();
+                            }
+
+                            holder.title.setText(weapon_c[position]);
+                            holder.icon.setImageResource(icons[position]);
+
+                            return convertView;
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PlaceSecActivity.this);
+                    builder.setAdapter(adapter,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    w_item_id = item + 1;
+//                                    Toast.makeText(PlaceSecActivity.this, "You selected: " + weapon_c[item], Toast.LENGTH_LONG).show();
+
+                                    try {
+                                        switch (w_item_id) {
+                                            case 2: {
+                                                weapon.setImageResource(R.drawable.pill_red);
+                                                desc_weapon.setText("[選擇] 紅聖水x" + weapon_list.getJSONObject(0).getInt("quantity"));
+                                            }
+                                            break;
+                                            case 3: {
+                                                weapon.setImageResource(R.drawable.pill_yell);
+                                                desc_weapon.setText("[選擇] 黃聖水x" + weapon_list.getJSONObject(2).getInt("quantity"));
+                                            }
+                                            break;
+                                            case 4: {
+                                                weapon.setImageResource(R.drawable.pill_blue);
+                                                desc_weapon.setText("[選擇] 藍聖水x" + weapon_list.getJSONObject(3).getInt("quantity"));
+                                            }
+                                            break;
+                                            default: {
+                                                weapon.setImageResource(R.drawable.pill_gray);
+                                                desc_weapon.setText("[選擇] 不用聖水");
+                                            }
+                                            break;
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+//                                    Toast.makeText(PlaceSecActivity.this, "You selected: " + w_item_id, Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
         if(placename.equals("山上蔣公銅像")) {
             placename = "黑馬蔣公";
         }
@@ -832,124 +782,98 @@ public class PlaceSecActivity extends AppCompatActivity {
         myTextView5.setTextColor(Color.BLACK);
 
         TextView tv = (TextView) findViewById(R.id.belong);
-        switch (name) {
-            case "Ruyen":
-                tv.setText("屬於:" + camp);
-                break;
-            default:
-                tv.setText("屬於:" + txt_party + camp);
-                break;
-        }
+//        switch (name) {
+//            case "Ruyen":
+//                tv.setText("屬於:" + camp);
+//                break;
+//            default:
+//                tv.setText("屬於:" + txt_party + camp);
+//                break;
+//        }
+        tv.setText("屬於:" + camp_id);
         tv.setTextSize(15);
         tv.setTextColor(Color.BLACK);
 
         TextView myTextView0 = (TextView) findViewById(R.id.lordname);
-        myTextView0.setText("石碑守護者:" + name);
+//        myTextView0.setText("石碑守護者:" + name);
+        myTextView0.setText("石碑守護者:" + keeper_id);
         myTextView0.setTextSize(15);
         myTextView0.setTextColor(Color.BLACK);
 
         TextView myTextView1 = (TextView) findViewById(R.id.blood);
-        switch (name) {
-            case "Ruyen":
-                myTextView1.setText("敵方的生命值:" + hp);
+//        switch (name) {
+//            case "Ruyen":
+//                myTextView1.setText("敵方的生命值:" + hp);
+//                break;
+//            default:
+//                myTextView1.setText(txt_party + "方生命值:" + hp);
+//                break;
+//        }
+        switch (camp_id) {
+            case 3: myTextView1.setText("敵方的生命值:" + n_hp);
                 break;
-            default:
-                myTextView1.setText("我的生命值:" + hp);
+            default: myTextView1.setText(txt_party + "方生命值:" + n_hp);
                 break;
         }
         myTextView1.setTextSize(15);
         myTextView1.setTextColor(Color.BLACK);
 
-
         myProgressBar = (ProgressBar) findViewById(R.id.progressbar);
-        myProgressBar.setProgress(Integer.parseInt(hp) * 5);
+        myProgressBar.setProgress(n_hp);
         Resources res = getResources();
-        switch (name) {
-            case "Ruyen":
-                myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
+//        switch (name) {
+//            case "Ruyen":
+//                myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
+//                break;
+//            default: {
+//                if (txt_party.equals("Sinae")) {
+//                    myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.green_progressbar));
+//                    break;
+//                } else {
+//                    myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.red_progressbar));
+//                    break;
+//                }
+//            }
+//        }
+        switch (camp_id) {
+            case 3: myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.black_progressbar));
                 break;
             default: {
                 if (txt_party.equals("Sinae")) {
                     myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.green_progressbar));
-//                    occupied();
                     break;
                 } else {
                     myProgressBar.setProgressDrawable(res.getDrawable(R.drawable.red_progressbar));
-//                    occupied();
                     break;
                 }
             }
         }
+        String url = "http://140.119.163.40:8080/DarkEmpire/app/ver1.0/totalRecord/list/" + txt_user + "/";
+        String userjson = "";
 
-//        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-//        ratingBar.setRating((Float.parseFloat(hp)) / 5);
-//        switch (name) {
-//            case "Ruyen": ratingBar.setProgressDrawable(getResources().getDrawable(R.drawable.ratingbar_color));break;
-//            default: {
-//                if(StoryActivity.party == "Sinae") ratingBar.setProgressDrawable(getResources().getDrawable(R.drawable.ratingbar_color_s));
-//                else ratingBar.setProgressDrawable(getResources().getDrawable(R.drawable.ratingbar_color_a)); break;
-//            }
-//        }
-//        Toast.makeText(PlaceSecActivity.this,
-//                String.valueOf((Float.parseFloat(hp))/5), Toast.LENGTH_SHORT).show();
+        try {
+            userjson = Httpconnect.httpget(url);
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+
+        int votes = 0;
+
+        try {
+            JSONArray userlist = new JSONArray(userjson);
+            votes = userlist.getJSONObject(0).getInt("mana_now");
+            username = userlist.getJSONObject(0).getString("user_name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final TextView textview = (TextView) findViewById(R.id.patrolvalue);
+        textview.setText("馬納值:" + votes);
+
+
     }
 
-
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            //要做的事情
-
-//            refresh();
-//            num++;
-//            handler.postDelayed(this, 2000);
-//            if (num == 2) {
-//                finish();
-//            }
-        }
-    };
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        client.connect();
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "PlaceSec Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app deep link URI is correct.
-//                Uri.parse("android-app://com.example.louise.test/http/host/path")
-//        );
-//        AppIndex.AppIndexApi.start(client, viewAction);
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "PlaceSec Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app deep link URI is correct.
-//                Uri.parse("android-app://com.example.louise.test/http/host/path")
-//        );
-//        AppIndex.AppIndexApi.end(client, viewAction);
-//        client.disconnect();
-//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -961,73 +885,43 @@ public class PlaceSecActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-//    public void occupied() {
-//        final Dialog dialog = new Dialog(PlaceSecActivity.this);
-//
-//        //setting custom layout to dialog
-//        dialog.setContentView(R.layout.custom_dialog_layout);
-//        dialog.setTitle("Custom Dialog");
-//
-//        //adding text dynamically
-//        TextView txt = (TextView) dialog.findViewById(R.id.textView);
-//        txt.setText("Put your dialog text here.");
-//
-//        ImageView image = (ImageView)dialog.findViewById(R.id.image);
-//        image.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_dialog_info));
-//
-//        //adding button click event
-//        Button dismissButton = (Button) dialog.findViewById(R.id.button);
-//        dismissButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-//
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PlaceSec Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.louise.test/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
 
-//    public void coin_generate() {
-//        String re = "";
-//        int rr = 0;
-//        int runeid = 0;
-//        int stone = 0;
-//        try {
-//            Random random = new Random();
-//            rr = random.nextInt(2);
-//            if (rr == 0) {
-//                runeid = 1;
-//                stone = 5;
-//            } else {
-//                runeid = 2;
-//                stone = 3;
-//            }
-//            re = Httpconnect.httpget("http://140.119.163.40:8080/GeniusLoci/userRuneList/app/get/" + txt_user + "/"+runeid+"/"+stone+"/");
-//        } catch (Exception e) {
-//            Toast.makeText(PlaceSecActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-//        }
-//        // result
-//        if (re.equals("success\n")) {
-//            final Toast toast2 = Toast.makeText(PlaceSecActivity.this, "got "+runeid+" ^^", Toast.LENGTH_SHORT);
-//            toast2.show();
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    toast2.cancel();
-//                }
-//            }, 200);
-//        } else {
-//            final Toast toast2 = Toast.makeText(PlaceSecActivity.this, "you can't get "+runeid+" ><", Toast.LENGTH_SHORT);
-//            toast2.show();
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    toast2.cancel();
-//                }
-//            }, 500);
-//        }
-//    }
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "PlaceSec Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.louise.test/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }

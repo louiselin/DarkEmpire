@@ -1,14 +1,18 @@
 package com.example.louise.test;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -166,5 +170,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         sum_checkin.setText("累積巡邏次數：" + count);
 
     }
+
 
 }
